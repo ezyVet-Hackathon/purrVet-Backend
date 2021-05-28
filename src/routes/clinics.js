@@ -60,7 +60,6 @@ clinicRoute.route("/clinic-search")
         })
 
         const objectIdsArray = await Promise.all(objectIdsResult)
-        console.log("objectIdsArray", objectIdsArray)
 
         for (const parentArray of objectIdsArray) {
           for (const searchObjectId of parentArray) {
@@ -70,8 +69,6 @@ clinicRoute.route("/clinic-search")
           }
         }
       }
-
-      console.log("objectIdMap", objectIdMap)
 
       const result = await Vets.find(queryObj).select("name location vicinity").lean().exec()
 
