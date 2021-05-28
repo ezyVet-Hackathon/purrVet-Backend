@@ -39,7 +39,7 @@ clinicRoute.route("/clinic-search")
         queryObj["location.lng"] = { $gte: locationBound.lngStart, $lte: locationBound.lngEnd }
       }
 
-      if (searchTerm) {
+      if (searchTerm != null && String(searchTerm).trim() !== "") {
         queryObj["name"] = { $regex: searchTerm, $options: "i" }
       }
 
