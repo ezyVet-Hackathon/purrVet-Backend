@@ -53,7 +53,6 @@ const ANIMALS = [
   "cat",
   "pig",
   "chicken",
-
 ]
 
 const CLINIC_TYPE = [
@@ -65,42 +64,20 @@ const CLINIC_TYPE = [
   "Large Animal"
 ]
 
-const all = async () => {
+const assignerRefactorFunc = async (vets, array, key, min, max = null) => {
   try {
     // Construct combined array
-    const keys = []
-    for (const key of KEYS) {
-      for (const language of LANGUAGES) {
-        keys.push({
-          key: key,
-          secondaryKey: language
-        })
-      }
-    }
-    console.log("keys", keys)
-  } catch (err) {
-    console.error("error assignLanguage", err)
-  }
-}
-
-// Assign language
-const assignLanguage = async (vets) => {
-  try {
-    // Construct combined array
-
-    const languageObj = {}
+    const valueObj = {}
     const objectIdObj = {}
-    const keys = []
-    for (const language of LANGUAGES) {
-      // keys.push({
-      //   key: "languages",
-      //   secondaryKey: language
-      // })
-      languageObj[language] = []
+    for (const value of array) {
+      valueObj[value] = []
     }
 
-    const valueRange = LANGUAGES.length - 1
-    const min = 2
+    let valueRange = array.length - 1
+    if (max !== null) {
+      valueRange = max
+    }
+
     for (const vet of vets) {
       // Randomly assign a value for this vet
       objectIdObj[vet] = []
@@ -108,9 +85,9 @@ const assignLanguage = async (vets) => {
       for (const loop of new Array(numOfRounds).fill(true)) {
         // Get a language to assign
         const rng = getRandom(0, valueRange)
-        const selectedValue = LANGUAGES[rng]
-        languageObj[selectedValue] = [
-          ...languageObj[selectedValue],
+        const selectedValue = array[rng]
+        valueObj[selectedValue] = [
+          ...valueObj[selectedValue],
           vet
         ]
 
@@ -123,13 +100,13 @@ const assignLanguage = async (vets) => {
 
     // Need to update the selected values in Vets and also the mapper
 
-    // Update language database
-    const promise = Object.entries(languageObj).map(async ([language, objectIds]) => {
+    // Update value database
+    const promise = Object.entries(valueObj).map(async ([valueKey, objectIds]) => {
       const cleanedArray = removeDuplicate(objectIds)
       await Mappers.findOneAndUpdate(
         {
-          key: "languages",
-          secondaryKey: language
+          key: key,
+          secondaryKey: valueKey
         },
         {
           value: cleanedArray
@@ -143,17 +120,26 @@ const assignLanguage = async (vets) => {
     await Promise.all(promise)
 
     // Update Vets with the language they can support
-    const promiseVets = Object.entries(objectIdObj).map(async ([objectId, language]) => {
-      const cleanedArray = removeDuplicate(language)
+    const promiseVets = Object.entries(objectIdObj).map(async ([objectId, value]) => {
+      const cleanedArray = removeDuplicate(value)
       await Vets.findOneAndUpdate({
         _id: new ObjectId(objectId)
       }, {
-        languages: cleanedArray
+        [key]: cleanedArray
       }).select().lean().exec()
     })
 
     await Promise.all(promiseVets)
 
+  } catch (err) {
+    console.error("error assignerRefactorFunc", err)
+  }
+}
+
+// Assign language
+const assignLanguage = async (vets) => {
+  try {
+    await assignerRefactorFunc(vets, LANGUAGES, "languages", 2, null)
   } catch (err) {
     console.error("error assignLanguage", err)
   }
