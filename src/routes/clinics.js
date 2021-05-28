@@ -21,6 +21,7 @@ clinicRoute.route("/clinic-search")
   .post(async (req, res) => {
     try {
       const locationBound = req.body.bounds
+      const searchTerm = req.body.searchTerm
 
       let queryObj = {}
       
@@ -36,6 +37,10 @@ clinicRoute.route("/clinic-search")
       if (locationBound) {
         queryObj["location.lat"] = { $gte: locationBound.latStart, $lte: locationBound.latEnd }
         queryObj["location.lng"] = { $gte: locationBound.lngStart, $lte: locationBound.lngEnd }
+      }
+
+      if (searchTerm) {
+        queryObj["name"] = { $regex: searchTerm, $options: "i" }
       }
 
       const result = await Vets.find(queryObj).select("name location vicinity").lean().exec()
