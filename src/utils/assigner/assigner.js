@@ -84,7 +84,7 @@ const assignerRefactorFunc = async (vets, array, key, min, max = null) => {
       const numOfRounds = getRandom(min, valueRange)
       for (const loop of new Array(numOfRounds).fill(true)) {
         // Get a language to assign
-        const rng = getRandom(0, valueRange)
+        const rng = getRandom(0, array.length - 1)
         const selectedValue = array[rng]
         valueObj[selectedValue] = [
           ...valueObj[selectedValue],
@@ -146,20 +146,40 @@ const assignLanguage = async (vets) => {
 }
 
 // Assign price
-const assignPrice = async () => {
-
+const assignPrice = async (vets) => {
+  try {
+    await assignerRefactorFunc(vets, PRICE, "price", 1, 1)
+  } catch (err) {
+    console.error("error assignPrice", err)
+  }
 }
 
 // Assign animal
-const assignAnimal = async () => {
+const assignAnimal = async (vets) => {
+  try {
+    await assignerRefactorFunc(vets, ANIMALS, "animals", 2, 4)
+  } catch (err) {
+    console.error("error assignPrice", err)
+  }
+}
 
+// Clinic Type
+const clinicType = async (vets) => {
+  try {
+    await assignerRefactorFunc(vets, CLINIC_TYPE, "clinicType", 1, 1)
+  } catch (err) {
+    console.error("error clinicType", err)
+  }
 }
 
 const main = async () => {
   try {
     const vets = await Vets.find().select().lean().exec()
     const vetsObjectId = vets.map((c) => c["_id"])
-    await assignLanguage(vetsObjectId)
+
+    // await assignLanguage(vetsObjectId)
+    // await assignPrice(vetsObjectId)
+    // await clinicType(vetsObjectId)
 
   } catch (err) {
     console.error("error main", err)
