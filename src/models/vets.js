@@ -11,7 +11,16 @@ const vetsSchema = new Schema({
     index: true
   },
   vicinity: String,
-  location: Schema.Types.Mixed,
+  location: {
+    lat: {
+      type: Schema.Types.Decimal128,
+      index: true
+    },
+    lng: {
+      type: Schema.Types.Decimal128,
+      index: true
+    }
+  },
   googleResults: {
     rating: {
       type: Schema.Types.Decimal128,

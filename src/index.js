@@ -2,7 +2,7 @@ import express from 'express'
 import http from 'http'
 import socketIo from 'socket.io'
 import config from './config'
-import { vetRoute } from './routes'
+import { vetRoute, clinicRoute } from './routes'
 // import { checkFirebaseToken } from './middleware'
 // import { onConnection } from './socket'
 import cors from 'cors'
@@ -43,7 +43,8 @@ app.use(express.json())
 
 app.use(
   "",
-  vetRoute
+  vetRoute,
+  clinicRoute,
 )
 
 server.listen(PORT, () => {
