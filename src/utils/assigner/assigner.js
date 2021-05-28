@@ -1,4 +1,4 @@
-import { Vets } from '../../models'
+import { Mappers, Vets } from '../../models'
 
 // Constants
 const KEYS = [
@@ -45,10 +45,53 @@ const CLINIC_TYPE = [
   "Large Animal"
 ]
 
+const all = async () => {
+  try {
+    // Construct combined array
+    const keys = []
+    for (const key of KEYS) {
+      for (const language of LANGUAGES) {
+        keys.push({
+          key: key,
+          secondaryKey: language
+        })
+      }
+    }
+    console.log("keys", keys)
+  } catch (err) {
+    console.error("error assignLanguage", err)
+  }
+}
+
 // Assign language
 const assignLanguage = async () => {
   try {
-    
+    // Construct combined array
+    const keys = []
+    for (const language of LANGUAGES) {
+      keys.push({
+        key: "languages",
+        secondaryKey: language
+      })
+    }
+    console.log("keys", keys)
+
+    const promise = keys.map(async (c) => {
+      await Mappers.findOneAndUpdate(
+        {
+          key: c.key,
+          secondaryKey: c.secondaryKey
+        },
+        {
+          value: []
+        },
+        {
+          upsert: true
+        }
+      ).select().lean().exec()
+    })
+
+    await Promise.all(promise)
   } catch (err) {
     console.error("error assignLanguage", err)
   }
@@ -62,4 +105,14 @@ const assignPrice = async () => {
 // Assign animal
 const assignAnimal = async () => {
 
+}
+
+const main = async () => {
+  await assignLanguage()
+
+  process.exit(0)
+}
+
+export {
+  main
 }

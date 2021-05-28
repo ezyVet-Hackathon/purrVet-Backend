@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./index.js",
-    "dev": "nodemon -r esm-wallaby index.js"
+    "dev": "nodemon -r esm-wallaby index.js",
+    "runner": "node -r esm-wallaby runner.js"
   },
   "engines": {
     "node": ">= 14.0.0",
