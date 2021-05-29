@@ -50,7 +50,16 @@ clinicRoute.route("/clinic-search")
       const objectIdMap = {}
 
       // Filtering down with ObjectID results
-      const languageOptionsTest = ["Mandarin", "English"]
+      const languageOptionsTest = [
+        "Maori",
+        "Samoan",
+        "Mandarin",
+        "Cantonese",
+        "Hindi",
+        "Vietnamese",
+        "Arabic",
+        "French"
+      ]
       const languageSearch = languageOptionsTest
       if (languageOptionsTest || languageOptions) {
         const objectIdsResult = languageSearch.map(async (c) => {
@@ -73,7 +82,7 @@ clinicRoute.route("/clinic-search")
         }
       }
 
-      const result = await Vets.find(queryObj).select("name location vicinity").lean().exec()
+      const result = await Vets.find(queryObj).select().lean().exec()
 
       const filteredSearch = result.filter((c) => {
         if (objectIdMap[c["_id"]]) {
