@@ -17,6 +17,9 @@ clinicRoute.route("/clinic")
   .post(async (req, res) => {
   })
 
+/**
+ * 
+ */
 clinicRoute.route("/clinic-search")
   .post(async (req, res) => {
     try {
@@ -25,7 +28,7 @@ clinicRoute.route("/clinic-search")
       const languageOptions = req.body.languageOptions
 
       let queryObj = {}
-      
+
       /**
        * Search by:
        * - Location boundary (Passed in to POST)

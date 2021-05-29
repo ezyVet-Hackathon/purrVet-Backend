@@ -11,7 +11,8 @@ const insertProfiles = async () => {
         email: c.email,
         dob: c.dob,
         registered: c.registered,
-        picture: c.picture
+        picture: c.picture,
+        name: c.name
       })
 
       await newProfile.save()
@@ -44,5 +45,7 @@ const insertVets = async () => {
   }
 }
 
-insertProfiles()
-insertVets()
+// insertProfiles()
+// insertVets()
+
+export default insertProfiles
