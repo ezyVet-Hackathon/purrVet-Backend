@@ -53,6 +53,11 @@ const ANIMALS = [
   "cat",
   "pig",
   "chicken",
+  "horse",
+  "rabbit",
+  "turtle",
+  "mouse",
+  "bird"
 ]
 
 const CLINIC_TYPE = [
@@ -180,6 +185,7 @@ const main = async () => {
     // await assignLanguage(vetsObjectId)
     // await assignPrice(vetsObjectId)
     // await clinicType(vetsObjectId)
+    await assignAnimal(vetsObjectId)
 
   } catch (err) {
     console.error("error main", err)
